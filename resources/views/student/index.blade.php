@@ -25,6 +25,10 @@
                     <th>name</th>
                     <th>mobile</th>
                     <th>rank</th>
+                    <th>
+                        oprate
+                    </th>
+
                 </tr>
             </thead>
 
@@ -39,6 +43,28 @@
                         <td>{{ $value['name'] }}</td>
                         <td>{{ $value['mobile'] }}</td>
                         <td class="my-rank">{{ $value['rank'] }}</td>
+                        <td>
+                            {{-- 方法一 --}}
+                            {{-- href="http://localhost/students/1/edit"  --}}
+                            {{-- <a href="http://localhost/students/{{ $value['id'] }}/edit" class="btn btn-warning">
+                                edit
+                            </a> --}}
+
+                            {{-- 方法二 --}}
+                            {{-- route('route.name', ['id' => 1]); --}}
+
+                            <form action="{{ route('students.destroy', ['student' => $value['id']]) }}" method="post">
+                                {{-- edit --}}
+                                <a href="{{ route('students.edit', ['student' => $value['id']]) }}"
+                                    class="btn btn-warning">
+                                    edit
+                                </a>
+                                @csrf
+                                @method('DELETE')
+                                {{-- del --}}
+                                <button type="submit" class="btn btn-danger">Del</button>
+                            </form>
+                        </td>
                     </tr>
                 @endforeach
 

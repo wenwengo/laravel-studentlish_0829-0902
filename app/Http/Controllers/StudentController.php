@@ -28,7 +28,11 @@ class StudentController extends Controller
         // $data = DB::table('students')
         //     ->get();
 
-        $data = Student::all();
+        $data = Student::with('phoneRelation')->get();
+        // dd($data);
+        // $data = Student::find(1)->phoneRelation->phone;
+        // $data = Student::find(1)->phoneRelation->student_id;
+        // dd($data);
 
         foreach ($data as $key => $value) {
             $rankText = 1;
@@ -66,6 +70,16 @@ class StudentController extends Controller
         $student->name = $request->name;
         $student->mobile = $request->mobile;
 
+
+        // $obj['id']
+        // $obj->id
+        // $obj.id
+
+        // $obj['id']()
+        // $obj->id()
+        // $obj.id()
+
+
         $student->save();
 
         return redirect()->route('students.index');
@@ -84,7 +98,12 @@ class StudentController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        // dd('hello StudentController edit');
+        // dd($id);
+        // $data = Student::find($id);
+        $data = Student::where('id', $id)->first();
+        // dd($data);
+        return view('student.edit', ['data' => $data]);
     }
 
     /**
@@ -92,7 +111,17 @@ class StudentController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // dd('hello StudentController update action');
+        // $input = $request->all();
+        $input = $request->except('_token', '_method');
+        // dd($input);
+
+        $data = Student::where('id', $id)->first();
+        $data->name = $input['name'];
+        $data->mobile = $input['mobile'];
+        $data->save();
+
+        return redirect()->route('students.index');
     }
 
     /**
@@ -100,6 +129,8 @@ class StudentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $data = Student::where('id', $id)->first();
+        $data->delete();
+        return redirect()->route('students.index');
     }
 }
